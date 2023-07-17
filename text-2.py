@@ -1,11 +1,14 @@
+#检测视频中某种颜色
+
 import cv2
 import numpy as np
 
 def empty(v):
     pass
 
-img = cv2.imread("./image/XiWinnie.jpg")
-img = cv2.resize(img, (0,0), fx=0.5, fy=0.5)
+
+cap = cv2.VideoCapture(0)
+
 
 #怎么去侦测颜色，并把它过滤出来
 #如果要检测某种颜色需要把图片转换成HSV格式
@@ -19,9 +22,10 @@ cv2.createTrackbar('Sat Max', 'TrackBar', 255, 255, empty)
 cv2.createTrackbar('Val Min', 'TrackBar', 0, 255, empty)
 cv2.createTrackbar('Val Max', 'TrackBar', 255, 255, empty)
 
-hsv = cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
 
 while True:
+    ret, img = cap.read()
+    hsv = cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
     h_min = cv2.getTrackbarPos('Hue Min', 'TrackBar')
     h_max = cv2.getTrackbarPos('Hue Max', 'TrackBar')
     s_min = cv2.getTrackbarPos('Sat Min', 'TrackBar')
@@ -35,12 +39,8 @@ while True:
     mask = cv2.inRange(hsv, lower, upper)
     reslut = cv2.bitwise_and(img, img, mask=mask)
     cv2.imshow('img', img)
-    cv2.imshow('hsv', hsv)
     cv2.imshow('mask', mask)
     cv2.imshow('reslut', reslut)
     cv2.waitKey(1)
     
     
-    
-
-
